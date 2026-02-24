@@ -3,143 +3,192 @@
 <head>
 <meta charset="UTF-8">
 <title>NiePrzepłacaj</title>
-<!-- Import czcionki Inter z Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-body { 
-    font-family: 'Inter', Arial, sans-serif; 
-    background:#f8f7f7; 
-    padding:30px; 
-    color:#130086;
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  background:#f8f7f7;
+  color:#130086;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding:40px;
 }
-h1,h2 { color:#130086; }
+
+h1 {
+  margin-bottom:5px;
+}
+
+p {
+  margin-top:0;
+  margin-bottom:30px;
+}
+
+.container {
+  display:flex;
+  align-items:flex-start;
+  gap:40px;
+  width:100%;
+  max-width:800px;
+}
+
+/* LEWA KOLUMNA */
+.sidebar {
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  width:180px;
+}
+
+.sidebar button {
+  background:white;
+  color:#130086;
+  border:2px solid #130086;
+  border-radius:6px;
+  padding:15px;
+  cursor:pointer;
+  font-weight:600;
+  text-transform:lowercase;
+  transition: background 0.2s;
+}
+.sidebar button:hover {
+  background:#e0e0ff;
+}
+
+/* PRAWA STRONA (formularz) */
+.main {
+  flex:1;
+}
 .hidden { display:none; }
-.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:15px; }
-.card { 
-    background:white; 
-    padding:15px; 
-    border-radius:12px; 
-    text-align:center; 
-    cursor:pointer; 
-    box-shadow:0 6px 15px rgba(0,0,0,.08);
-    transition: transform 0.2s;
+
+.main select,
+.main input,
+.main button {
+  width:100%;
+  padding:12px;
+  margin-bottom:15px;
+  border:2px solid #130086;
+  border-radius:6px;
+  font-family:'Inter',sans-serif;
+  font-size:15px;
 }
-.card:hover { 
-    background:#e0e0ff; 
-    transform: translateY(-3px);
+
+.main button {
+  background:white;
+  color:#130086;
+  cursor:pointer;
+  font-weight:600;
 }
-select,input,button { 
-    width:100%; 
-    padding:12px; 
-    margin-top:10px; 
-    border-radius:8px; 
-    border:1px solid #ccc; 
-    font-family: 'Inter', Arial, sans-serif;
+.main button:hover {
+  background:#e0e0ff;
 }
-button { 
-    background:#130086; 
-    color:white; 
-    border:none; 
-    cursor:pointer; 
-    font-weight:600;
+
+.result {
+  margin-top:10px;
+  border:2px solid #130086;
+  border-radius:6px;
+  padding:15px;
 }
-.result { margin-top:20px; }
-.sub { background:#e0e0ff; padding:10px; border-radius:8px; margin-top:10px; }
+
+.sub {
+  margin-top:8px;
+  border-top:1px solid #130086;
+  padding-top:8px;
+}
 </style>
 </head>
 <body>
 
-<h1>NiePrzepłacaj</h1>
-<p>Wybierz kategorię produktów, aby zobaczyć ile możesz zaoszczędzić!</p>
+<h1>Nie przepłacaj</h1>
+<p>Wybierz kategorię produktu aby zobaczyć ile możesz oszczędzić</p>
 
-<div id="categories" class="grid"></div>
+<div class="container">
+  <div class="sidebar" id="categories"></div>
 
-<div id="app" class="hidden">
-  <h2 id="catTitle"></h2>
-  <input id="search" placeholder="Szukaj produktu...">
-  <select id="product"></select>
-  <input id="qty" type="number" placeholder="Ile razy w miesiącu kupujesz?">
-  <button onclick="calc()">Policz oszczędności</button>
-  <div class="result" id="result"></div>
+  <div class="main" id="app" class="hidden">
+    <h2 id="catTitle"></h2>
+    <select id="product"></select>
+    <input id="qty" type="number" placeholder="Ile razy w miesiącu kupujesz?">
+    <button onclick="calc()">Policz oszczędności</button>
+    <div class="result" id="result"></div>
+  </div>
 </div>
 
 <script>
-// --- BAZA PRODUKTÓW ---
+// --- DANE ---
 const data = {
-"Napoje": {
-  icon:"🥤",
-  products:{
-    "Coca-Cola 0.5L": {price:3, subs:{"Freeway Cola 0.5L":2}},
-    "Pepsi 0.5L": {price:3, subs:{"Hoop Cola 0.5L":2.2}},
-    "Fanta 0.5L": {price:3, subs:{"Freeway Orange 0.5L":2}},
-    "Sprite 0.5L": {price:3, subs:{"Hoop Lemon 0.5L":2.3}},
-    "Red Bull 250ml": {price:6, subs:{"Tiger 250ml":3.5,"Black 250ml":3}},
-    "Monster 500ml": {price:7, subs:{"Tiger Energy 500ml":4.5}},
-    "Żywiec Zdrój 0.5L": {price:2.5, subs:{"Woda Biedronka 0.5L":1.5}},
-    "Tymbark Jabłko 0.5L": {price:3.5, subs:{"Riviva Jabłko 0.5L":2.5}},
-    "Cappy Pomarańcza 0.5L": {price:4, subs:{"Hortex Pomarańcza 0.5L":3}},
-    "Nestea 0.5L": {price:4, subs:{"Freeway Ice Tea 0.5L":2.8}}
+  "Napoje": {
+    products:{
+      "Coca-Cola 0.5L": {price:3, subs:{"Freeway Cola 0.5L":2}},
+      "Pepsi 0.5L": {price:3, subs:{"Hoop Cola 0.5L":2.2}},
+      "Red Bull 250ml": {price:6, subs:{"Tiger 250ml":3.5,"Black 250ml":3}}
+    }
+  },
+  "Jedzenie": {
+    products:{
+      "Kinder Bueno": {price:4.5, subs:{"Prince Polo":2.5}},
+      "Czekolada Milka 100g": {price:5, subs:{"Czekolada Lidl 100g":3}}
+    }
+  },
+  "Kosmetyki":{
+    products:{
+      "Szampon Nivea": {price:12, subs:{"Szampon Lidl":7}},
+      "Żel Dove": {price:9, subs:{"Żel BeBeauty":5}}
+    }
+  },
+  "Środki czystości":{
+    products:{
+      "Domestos 750ml":{price:10, subs:{"W5 Płyn 750ml":5.5}},
+      "Fairy 450ml":{price:9, subs:{"Pur 450ml":6}}
+    }
   }
-},
-"Jedzenie": {
-  icon:"🍫",
-  products:{
-    "Kinder Bueno": {price:4.5, subs:{"Prince Polo":2.5}},
-    "Miu Miu": {price:5, subs:{"Jogobella":3}},
-    "Haribo Żelki 100g": {price:3.5, subs:{"Żelki Lidl 100g":2}},
-    "Baton Mars": {price:3.5, subs:{"Baton Lidl":1.9}},
-    "Baton Snickers": {price:3.5, subs:{"Baton Carrefour":1.8}},
-    "Milky Way": {price:3.5, subs:{"Baton Tesco":2}},
-    "Jogurt pitny Danone": {price:3, subs:{"Jogurt pitny Biedronka":2}},
-    "Mleko smakowe Miu Miu 250ml": {price:3, subs:{"Mleko smakowe Biedronka 250ml":2}},
-    "Czekolada Milka 100g": {price:5, subs:{"Czekolada Lidl 100g":3}},
-    "Czekolada Wedel 100g": {price:5, subs:{"Czekolada Aldi 100g":3}}
-  }
-}
 };
 
-// --- UI RENDER ---
+// --- ELEMENTY HTML ---
 const catDiv = document.getElementById("categories");
 const app = document.getElementById("app");
 const prodSel = document.getElementById("product");
-const search = document.getElementById("search");
 let currentCat;
 
+// GENEROWANIE LISTY KATEGORII
 for(let c in data){
-  catDiv.innerHTML += `<div class="card" onclick="openCat('${c}')">${data[c].icon}<br>${c}</div>`;
+  const btn = document.createElement("button");
+  btn.textContent = c.toLowerCase();
+  btn.onclick = ()=>openCat(c);
+  catDiv.appendChild(btn);
 }
 
 function openCat(c){
   currentCat = c;
   app.classList.remove("hidden");
-  document.getElementById("catTitle").innerText = c;
+  document.getElementById("catTitle").innerText = c.toLowerCase();
   loadProducts();
 }
 
 function loadProducts(){
   prodSel.innerHTML = "";
   for(let p in data[currentCat].products){
-    prodSel.innerHTML += `<option>${p}</option>`;
+    const opt = document.createElement("option");
+    opt.textContent = p;
+    prodSel.appendChild(opt);
   }
 }
 
-search.oninput = ()=>{
-  prodSel.innerHTML = "";
-  for(let p in data[currentCat].products){
-    if(p.toLowerCase().includes(search.value.toLowerCase()))
-      prodSel.innerHTML += `<option>${p}</option>`;
-  }
-};
-
 function calc(){
   const q = parseFloat(document.getElementById("qty").value);
-  if(!q || q <=0){ alert("Podaj poprawną ilość"); return; }
+  if(!q || q<=0){ alert("Podaj poprawną ilość"); return; }
   const p = prodSel.value;
-  const base = data[currentCat].products[p];
-  let html = `<b>Miesięcznie wydajesz:</b> ${(base.price*q).toFixed(2)} zł`;
-  for(let s in base.subs){
-    const save = (base.price - base.subs[s])*q;
-    html += `<div class="sub">${s}<br>Miesięcznie: ${save.toFixed(2)} zł<br>Rocznie: <b>${(save*12).toFixed(2)} zł</b></div>`;
+  const item = data[currentCat].products[p];
+  let html = `<b>Cena:</b> ${item.price.toFixed(2)} zł<br>`;
+  html += `<b>Miesięcznie wydajesz:</b> ${(item.price*q).toFixed(2)} zł<br>`;
+  html += `<b>Rocznie wydajesz:</b> ${(item.price*q*12).toFixed(2)} zł<br>`;
+  
+  for(let s in item.subs){
+    const save = (item.price - item.subs[s])*q;
+    html += `<div class="sub"><b>${s}</b><br>Cena: ${item.subs[s].toFixed(2)} zł<br>
+    Miesięcznie oszczędzasz: ${save.toFixed(2)} zł<br>
+    Rocznie oszczędzasz: <b>${(save*12).toFixed(2)} zł</b></div>`;
   }
   document.getElementById("result").innerHTML = html;
 }
@@ -147,3 +196,4 @@ function calc(){
 
 </body>
 </html>
+
