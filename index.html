@@ -56,7 +56,7 @@ p {
   border-radius:20px;
   cursor:pointer;
   transition:0.2s;
-  color:#130086; /* napisy niebieskie */
+  color:#130086;
 }
 
 .sidebar button:hover {
@@ -149,27 +149,60 @@ p {
 const data = {
   "Napoje": {
     products:{
-      "Coca-Cola 0.5L": {price:3, subs:{"Freeway Cola 0.5L":2}},
-      "Pepsi 0.5L": {price:3, subs:{"Hoop Cola 0.5L":2.2}},
-      "Red Bull 250ml": {price:6, subs:{"Tiger 250ml":3.5,"Black 250ml":3}}
+     "Coca-Cola 0.5L": {price:5.2, subs:{"Cola Original 0.5L":2.1, "Freeway Cola":2.1, "Hoop Cola 0.5L":2.2,"Mio Rio Cola 0.5L":2.2}},
+     "Tymbark Jabłko-Mięta 0.5L": {price:3.5, subs:{"Riviva Jabłko-Mięta 0.5L":1.9}},
+     "Lipton Lemon 0.5L": {price:4.6, subs:{"Solevita Ice Tea Cytryna 0.5L":2.1}},
+     "Cisowianka Woda 0.5L": {price:2.9, subs:{"Żywiec Zdrój Woda 0.5L":2.6, "Kraina Wód Woda 0.5L":1.8, "Saguaro Woda 0.5L":1.6}},
+     "Tymbark Sok Pomarańczowy 1L": {price:8.9, subs:{"Solevita Sok Pomarańczowy 1L":5.5, "Riviva Sok Pomarańczowy 1L":5.3, "Hortex Sok Pomarańczowy 1L":7.9}},
+     "Nestea 1.5L": {price:7.9, subs:{"Freeway Ice Tea 1.5L":4.2, "Riviva Ice Tea 1.5L":4.0, "Oshee Ice Tea 1.5L":6.5}},
+     "Oshee Isotonic 750ml": {price:4.5, subs:{"Powerade 750ml":4.9,"4Move Isotonic 750ml":3.9,"ActivLab Isotonic 750ml":3.5}},
+     "Kubuś Play 400ml": {price:3.5, subs:{"Pysio 400ml":3.2,"Leon Sok 400ml":2.9,"Riviva Kids 400ml":2.8}},
+     "Lipton Ice Tea 1.5L": {price:8.2, subs:{"Fuze Tea 1.5L":8.5,"Freeway Ice Tea 1.5L":4.2,"Nestea 1.5L":7.9}}
     }
   },
   "Jedzenie": {
     products:{
-      "Kinder Bueno": {price:4.5, subs:{"Prince Polo":2.5}},
-      "Czekolada Milka 100g": {price:5, subs:{"Czekolada Lidl 100g":3}}
+      "Kinder Bueno": {price:4.9, subs:{"Knoppers Bar":3.5, "Choco Fresh Bar":2.8, "Way To Go Wafer":2.5}},
+      "Czekolada Milka 100g": {price:5, subs:{"Czekolada Lidl 100g":3}},
+      "Nutella 350g": {price:14.9, subs:{"Nutoka Krem 350g":7.5,"Choco Nussa 400g":8.9,"Magiczne Duo Krem 400g":6.9}},
+      "Lay's Chips 140g": {price:7.9, subs:{"Snack Day Chips 150g":4.5,"Top Chips 150g":4.7,"Crunchips 140g":6.9}},
+      "Milka Czekolada 100g": {price:6.5, subs:{"Fin Carre Czekolada 100g":3.9,"Moser Roth Czekolada 125g":5.0,"Schogetten Czekolada 100g":5.5}},
+      "Chleb pszenny 500g": {price:4.5, subs:{"Chleb tostowy 500g":4.9,"Chleb graham 500g":5.2,"Chleb mieszany 500g":4.2}},
+      "Mleko 3.2% 1L": {price:4.2, subs:{"Mleko 2% 1L":3.9,"Mleko UHT 3.2% 1L":4.0,"Mleko bez laktozy 1L":4.5}},
+      "Masło 200g": {price:8.5, subs:{"Margaryna 250g":5.2,"Masmix 200g":6.5,"Osełka maślana 200g":7.9}},
+      "Makaron spaghetti 500g": {price:3.5, subs:{"Makaron penne 500g":3.5,"Makaron świderki 500g":3.6,"Makaron tagliatelle 500g":4.5}},
+      "Ryż biały 1kg": {price:6.9, subs:{"Ryż parboiled 1kg":7.2,"Ryż jaśminowy 1kg":8.5,"Kasza jęczmienna 1kg":5.9}},
+      "Pizza mrożona 400g": {price:11.9, subs:{"Pizza Dr. Oetker 380g":12.9,"Pizza Guseppe 400g":10.9,"Pizza Alfredo 400g":9.9}},
+      "Jogurt naturalny 400g": {price:3.9, subs:{"Jogurt grecki 400g":4.9,"Jogurt Pilos 400g":3.2,"Jogurt Bakoma 400g":4.2}},
+      "Serek wiejski 200g": {price:3.2, subs:{"Serek wiejski Pilos":2.9,"Serek wiejski Piątnica":3.5,"Serek wiejski Bakoma":3.3}},
+      "Parówki 250g": {price:6.5, subs:{"Parówki Berlinki":8.9,"Parówki Morliny":7.9,"Parówki Pikok":5.9}},
+      "Frytki mrożone 750g": {price:7.5, subs:{"Frytki McCain":9.5,"Frytki Aviko":8.5,"Frytki Snack Day":6.5}},
+      "Pierogi ruskie 450g": {price:8.5, subs:{"Pierogi z mięsem":9.5,"Pierogi z serem":8.9,"Pierogi domowe":10.5}}
     }
   },
   "Kosmetyki":{
     products:{
       "Szampon Nivea": {price:12, subs:{"Szampon Lidl":7}},
-      "Żel Dove": {price:9, subs:{"Żel BeBeauty":5}}
+      "Żel Dove": {price:9, subs:{"Żel BeBeauty":5}},
+      "Nivea Creme 150ml": {price:15.5, subs:{"Isana Creme 150ml":6.5,"Ziaja Krem Uniwersalny 150ml":7.0,"Alterra Creme 150ml":8.5}},
+      "Head & Shoulders Szampon 400ml": {price:19.9, subs:{"Isana Szampon 300ml":6.9,"Balea Szampon 300ml":6.5,"Ziaja Szampon 300ml":7.9}},
+      "Colgate Pasta 100ml": {price:9.5, subs:{"Dontodent Pasta 125ml":3.9,"Sensident Pasta 100ml":4.2,"Ziaja Mintperfekt 100ml":5.9}},
+      "Nivea Dezodorant 150ml": {price:11.9, subs:{"Isana Dezodorant 150ml":5.5,"Balea Dezodorant 150ml":5.0,"Rexona Dezodorant 150ml":12.5}},
+      "Pantene Szampon 400ml": {price:18.9, subs:{"Elseve Szampon 400ml":16.9,"Isana Szampon 300ml":6.9,"Balea Szampon 300ml":6.5}},
+      "Nivea Żel pod prysznic 250ml": {price:10.9, subs:{"Palmolive Żel 250ml":9.9,"Isana Żel 300ml":6.5,"Balea Żel 300ml":6.5}},
+      "Nivea Balsam do ciała 400ml": {price:18.9, subs:{"Ziaja Balsam 400ml":13.9,"Isana Balsam 400ml":10.9,"Balea Balsam 400ml":11.5}}
     }
   },
   "Środki Czystości":{
     products:{
       "Domestos 750ml":{price:10, subs:{"W5 Płyn 750ml":5.5}},
-      "Fairy 450ml":{price:9, subs:{"Pur 450ml":6}}
+      "Fairy 450ml":{price:9, subs:{"Pur 450ml":6}},
+      "Fairy Płyn do naczyń 450ml": {price:10.9, subs:{"Ludwik Płyn 450ml":7.5,"Pur Płyn 450ml":8.9,"W5 Płyn 500ml":4.9}},
+      "Persil Proszek 3kg": {price:39.9, subs:{"Ariel Proszek 3kg":37.9,"Vizir Proszek 3kg":35.9,"Formil Proszek 3kg":24.9}},
+      "Domestos 750ml": {price:10.5, subs:{"Duck WC Cleaner 750ml":9.5,"Cillit Bang 750ml":11.9,"W5 WC Cleaner 750ml":6.5}},
+      "Ajax Płyn do podłóg 1L": {price:9.9, subs:{"Ludwik Płyn uniwersalny 1L":8.5,"W5 Płyn do podłóg 1L":6.5,"Clinex Płyn 1L":9.5}},
+      "Lenor Płyn do płukania 1L": {price:14.9, subs:{"Silan Płyn 1L":13.9,"Coccolino Płyn 1L":15.9,"Formil Płyn 1L":9.9}},
+      "Papier toaletowy 8 rolek": {price:12.9, subs:{"Velvet Papier 8 rolek":14.9,"Foxy Papier 8 rolek":13.9,"Queen Papier 8 rolek":10.9}}
     }
   }
 };
@@ -192,12 +225,10 @@ function openCat(c, event){
   currentCat = c;
   app.classList.remove("hidden");
 
-  // podświetlenie wybranego kwadratu
   document.querySelectorAll(".sidebar button")
     .forEach(b => b.classList.remove("active"));
   event.currentTarget.classList.add("active");
 
-  // Nie pokazujemy tytułu kategorii
   loadProducts();
 }
 
